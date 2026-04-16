@@ -1,0 +1,134 @@
+{
+  "name": "Assistant de veille automatique",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "feedUrl": "https://techcrunch.com/category/artificial-intelligence/feed/"
+      },
+      "id": "6b664412-0731-41de-8a10-d925be569d91",
+      "name": "RSS Feed",
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Agis comme un assistant de recherche. Résume l'article suivant en exactement 3 puces (bullet points) claires et concises. Voici le texte de l'article : {{ $json.contentSnippet || $json.description }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "0a33ee34-99df-4646-b9a5-f05233d60c5b",
+      "name": "OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        464,
+        304
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "tZRuiOxAMOVG1opb",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "344135cb-d217-800d-a13f-c4cf94b1bae5",
+          "mode": "list",
+          "cachedResultName": "344135cb-d217-800d-a13f-c4cf94b1bae5",
+          "cachedResultUrl": "https://www.notion.so/344135cbd217800da13fc4cf94b1bae5"
+        },
+        "title": "={{ $(\"RSS Feed\").item.json.title }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "URL|url",
+              "urlValue": "={{ $(\"RSS Feed\").item.json.link }}"
+            },
+            {
+              "key": "Date|date",
+              "date": "={{ $(\"RSS Feed\").item.json.pubDate }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3a1945ab-9ff5-441f-bd79-75da5abe2994",
+      "name": "Notion",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        816,
+        304
+      ],
+      "credentials": {
+        "notionApi": {
+          "id": "3U0qkbaMxG82zvk9",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "RSS Feed": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Notion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5e34bb96-6954-4ad3-8ea0-7b40a437d7d4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "edee8c6c2276620d5e001543730b2c05eaa6f90997ed705d448d17daa82895b0"
+  },
+  "id": "c5Iifq656jf3aUsn",
+  "tags": []
+}
