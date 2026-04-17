@@ -43,7 +43,7 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2.1,
       "position": [
-        464,
+        688,
         304
       ],
       "credentials": {
@@ -68,10 +68,12 @@
           "propertyValues": [
             {
               "key": "URL|url",
-              "urlValue": "={{ $(\"RSS Feed\").item.json.link }}"
+              "urlValue": "={{ $(\"RSS Feed\").item.json.link }}",
+              "relationValue": ""
             },
             {
               "key": "Date|date",
+              "relationValue": "",
               "date": "={{ $(\"RSS Feed\").item.json.pubDate }}"
             }
           ]
@@ -83,7 +85,7 @@
       "type": "n8n-nodes-base.notion",
       "typeVersion": 2.2,
       "position": [
-        816,
+        1040,
         304
       ],
       "credentials": {
@@ -92,6 +94,27 @@
           "name": "Notion account"
         }
       }
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "isoDate",
+              "order": "descending"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "261a9181-a944-46be-8aec-db78aaa41ae5",
+      "name": "Sort by Date",
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        464,
+        304
+      ]
     }
   ],
   "pinData": {},
@@ -100,7 +123,7 @@
       "main": [
         [
           {
-            "node": "OpenAI",
+            "node": "Sort by Date",
             "type": "main",
             "index": 0
           }
@@ -117,6 +140,22 @@
           }
         ]
       ]
+    },
+    "Sort by Date": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion": {
+      "main": [
+        []
+      ]
     }
   },
   "active": false,
@@ -124,7 +163,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "5e34bb96-6954-4ad3-8ea0-7b40a437d7d4",
+  "versionId": "9a1dac68-471b-48a9-ba3c-215b974dc7bd",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "edee8c6c2276620d5e001543730b2c05eaa6f90997ed705d448d17daa82895b0"
